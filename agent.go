@@ -69,8 +69,8 @@ func (a *Agent) Command(command string) (*LlmOutput, error) {
 			color.Green("Reasoning: %s\n", response.Reasoning)
 		}
 		if response.Command != "" {
-			fmt.Printf("PWD: %s\n", a.WorkingDir)
-			fmt.Println(response.Command)
+			color.Cyan("PWD: %s\n", a.WorkingDir)
+			color.Cyan(response.Command)
 		}
 		cmd := exec.Command("bash", "-c", response.Command)
 		if response.Directory != "" {
@@ -88,9 +88,9 @@ func (a *Agent) Command(command string) (*LlmOutput, error) {
 			lastOutput = string(stdout)
 		}
 		truncated := false
-		if len(lastOutput) > 2048 {
+		if len(lastOutput) > 8192 {
 			// get the last 2048 characters
-			lastOutput = lastOutput[len(lastOutput)-2048:]
+			lastOutput = lastOutput[len(lastOutput)-8192:]
 			truncated = true
 		}
 		a.LastCommands = append(a.LastCommands, Command{
